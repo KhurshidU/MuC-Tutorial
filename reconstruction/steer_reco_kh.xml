@@ -60,6 +60,8 @@
     <!-- <processor name="VertexFinderUnconstrained"/>  -->
     <processor name="JetClusteringAndRefiner"/>   <!-- added May 26-->
     
+    <!-- ========== Khurshid's Processors  ========== -->
+    <processor name="khurshid_works"/>
     
     <!-- ========== output  ========== -->
     <processor name="Output_DST"/>
@@ -92,7 +94,7 @@
   <processor name="Config" type="CLICRecoConfig" >
     <parameter name="Verbosity" options="DEBUG0-9,MESSAGE0-9,WARNING0-9,ERROR0-9,SILENT"> MESSAGE  </parameter>
     <!--Which option to use for Overlay: False, BIB. Then use, e.g., Config.OverlayFalse in the condition-->
-    <parameter name="Overlay" type="string">Test</parameter>
+    <parameter name="Overlay" type="string">False</parameter>
     <!--Possible values and conditions for option Overlay-->
     <parameter name="OverlayChoices" type="StringVec">False Test BIB Trimmed</parameter>
     <!--Which option to use for VertexUnconstrained: ON, OFF. Then use, e.g., Config.VertexUnconstrainedOFF in the condition-->
@@ -107,7 +109,7 @@
     <!-- compression of output file 0: false >0: true (default) -->
     <parameter name="Compress" type="int" value="1"/>
     <!-- filename without extension-->
-    <parameter name="FileName" type="string" value="histograms_bib_trial"/>
+    <parameter name="FileName" type="string" value="histograms_nbib_kh"/>
     <!-- type of output file xml (default) or root ( only OpenScientist)-->
     <parameter name="FileType" type="string" value="root "/>
   </processor>
@@ -119,7 +121,7 @@
 
   <processor name="Output_REC" type="LCIOOutputProcessor">
     <!--   standard output: keep all collections -->
-    <parameter name="LCIOOutputFile" type="string"> Output_REC_bib_trial.slcio </parameter>
+    <parameter name="LCIOOutputFile" type="string"> Output_REC_nbib_kh.slcio </parameter>
     <parameter name="FullSubsetCollections" type="StringVec"> </parameter>
     <parameter name="LCIOWriteMode" type="string" value="None"/>
     <!-- <parameter name="SplitFileSizekB" type="int"> 996147 </parameter> --> 
@@ -131,7 +133,7 @@
 
   <processor name="Output_DST" type="LCIOOutputProcessor">
     <!--   dst output: keep only collections for analysis -->
-    <parameter name="LCIOOutputFile" type="string"> Output_DST_bib_trial.slcio </parameter>
+    <parameter name="LCIOOutputFile" type="string"> Output_DST_nbib_kh.slcio </parameter>
     <parameter name="FullSubsetCollections" type="StringVec"> </parameter>
     <parameter name="DropCollectionTypes" type="StringVec">
       SimTrackerHit
@@ -148,5 +150,6 @@
     <parameter name="Verbosity" type="string">WARNING </parameter>
   </processor>
 
+ <processor name="khurshid_works" type="khurshid_works">
+ </processor>
 </marlin>
-
