@@ -30,7 +30,7 @@ khurshid_works::khurshid_works()
   ecalCollections.push_back(std::string("EcalBarrelCollection"));
   
   registerInputCollection( LCIO::CALORIMETERHIT,
-                            "ECALOutputCollection0" ,
+                            "ECALOutputCollection_kh_input" ,
                             "ECAL Collection of real Hits" ,
                             //_inputEcalCollections.at(0),
                          _inputEcalCollection,   std::string("ECALBarrel") );
@@ -39,10 +39,10 @@ khurshid_works::khurshid_works()
 
 
   registerOutputCollection( LCIO::CALORIMETERHIT, // output - copy of ecal hits 
-                            "ECALOutputCollection0" ,
+                            "ECALOutputCollection_kh_output" ,
                             "Khurshid's copy of ECAL Collection of real Hits" ,
                             _outputEcalCollections.at(0),
-                            std::string("ECALBarrel") );   
+                            std::string("ECALBarrel_output") );   
 std::cout << "crush point" << _outputEcalCollections.at(0)<< std::endl;
 
 }
