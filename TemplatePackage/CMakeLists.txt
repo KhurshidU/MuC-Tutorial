@@ -40,8 +40,7 @@ ENDIF()
 
 	# Main library with Processors
 ADD_LIBRARY(TemplatePackage SHARED
-        /opt/ilcsoft/muonc/
-	./src/khurshid_works.cxx
+        /opt/ilcsoft/muonc/;/work/khurriccan/MuC-Tutorial/TemplatePackage/src/khurshid_works.cxx
   )
 TARGET_INCLUDE_DIRECTORIES(TemplatePackage
   PUBLIC

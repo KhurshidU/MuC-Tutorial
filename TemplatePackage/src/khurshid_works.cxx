@@ -73,13 +73,25 @@ void khurshid_works::processEvent( LCEvent * evt ) {
   }
 
   std::cout << "Found " << inputCol->getNumberOfElements() << " ECalorimeter hits." << std::endl;
-
+  LCCollectionVec *ecalcol_kh = new LCCollectionVec(LCIO::CALORIMETERHIT);
   for(uint32_t i=0;i<inputCol->getNumberOfElements();i++) {
-	 std::vector<const CalorimeterHitImpl*> myVector;
-	 const CalorimeterHitImpl *hit_copy=static_cast<const CalorimeterHitImpl*>(inputCol->getElementAt(i));
-         myVector.push_back(hit_copy);
+	 CalorimeterHitImpl *hit_copy=static_cast<CalorimeterHitImpl*>(inputCol->getElementAt(i));
+         ecalcol_kh->addElement(hit_copy);
          std::cout << "Found " << hit_copy<< " ECalorimeter hits." << std::endl;
    }
+
+
+  // LCCollectionVec *ecalcol = new LCCollectionVec(LCIO::CALORIMETERHIT);
+ //  ecalcol_khurshid = myVector;
+   //ecalcol->setFlag(_flag.getFlag());
+   evt->addCollection(ecalcol_kh,_outputEcalCollections[0].c_str());
+ // Create and add relation collection for ECAL/HCAL to event
+  //    chschcol = calohitNav.createLCCollection();
+ ///     evt->addCollection(chschcol,_outputRelCollection.c_str());
+
+
+
+
 }
 
 void khurshid_works::check( LCEvent * /*evt*/ )
