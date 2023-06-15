@@ -1,7 +1,7 @@
 #pragma once
 
 #include <TH1F.h>
-
+#include <IMPL/LCFlagImpl.h>
 #include <marlin/Processor.h>
 
 //! A template processor that should be modified to do what you want.
@@ -39,11 +39,10 @@ public:
   /** Called after data processing for clean up.
    */
   virtual void end() ;  
-
+  LCFlagImpl _flag{};
 private:
   //! Input Collection
-//  std::vector<std::string> _inputEcalCollections{};
-   std::string _inputEcalCollection{};
+    std::vector<std::string> _inputEcalCollections{};
   //! Output Collection
  
   std::vector<std::string> _outputEcalCollections{};
