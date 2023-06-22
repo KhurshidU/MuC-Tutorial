@@ -114,17 +114,17 @@ void khurshid_soft_killer::processEvent( LCEvent * evt ) {
     //create dummy empty collection only in case there are processor that need the presence of them in later stages
 
     // create output collection and save every jet with its particles in it
-    IMPL::LCCollectionVec* lccJetsOut = new IMPL::LCCollectionVec(LCIO::RECONSTRUCTEDPARTICLE);
+    IMPL::LCCollectionVec* lccJetsOut_kh = new IMPL::LCCollectionVec(LCIO::RECONSTRUCTEDPARTICLE);
     // create output collection and save every particle which contributes to a jet
 
-    IMPL::LCCollectionVec* lccParticlesOut(NULL);
+    IMPL::LCCollectionVec* lccParticlesOut_kh(NULL);
     if (_storeParticlesInJets){
-      lccParticlesOut= new IMPL::LCCollectionVec(LCIO::RECONSTRUCTEDPARTICLE);
-      lccParticlesOut->setSubset(true);
+      lccParticlesOut_kh= new IMPL::LCCollectionVec(LCIO::RECONSTRUCTEDPARTICLE);
+      lccParticlesOut_kh->setSubset(true);
     }
 
-    evt->addCollection(lccJetsOut, _lcJetOutName_kh);
-    if (_storeParticlesInJets) evt->addCollection(lccParticlesOut, _lcParticleOutName_kh);
+    evt->addCollection(lccJetsOut_kh, _lcJetOutName_kh);
+    if (_storeParticlesInJets) evt->addCollection(lccParticlesOut_kh, _lcParticleOutName_kh);
 
 
     return ;
@@ -141,13 +141,13 @@ void khurshid_soft_killer::processEvent( LCEvent * evt ) {
 
   //contrib::SoftKiller soft_killer(-0.0, 4.0, 0.5, 0.3);
   
-  double pt_threshold;
+  double pt_threshold_1 = 0.1;
   std::vector<fastjet::PseudoJet>  pjList_softly_killed;
-  soft_killer.apply(pjList_softly_killed, pjList, pt_threshold);
+  soft_killer.apply(pjList, pjList_softly_killed, pt_threshold_1);
   std::cout << "# Ran the following soft killer: " << soft_killer.description() << std::endl;
 
   //std::cout << setprecision(4);
-  std::cout << "Soft Killer applied a pt threshold of " << pt_threshold << std::endl;
+  std::cout << "Soft Killer applied a pt threshold of " << pt_threshold_1 << std::endl;
 
 
   PseudoJetList jetsk;
@@ -186,17 +186,44 @@ void khurshid_soft_killer::processEvent( LCEvent * evt ) {
   const unsigned nrJets = jetsk.size();
 
   // create output collection and save every jet with its particles in it
-  IMPL::LCCollectionVec* lccJetsOut_kh_soft_k = new IMPL::LCCollectionVec(LCIO::RECONSTRUCTEDPARTICLE);
+  IMPL::LCCollectionVec* lccJetsOut_kh = new IMPL::LCCollectionVec(LCIO::RECONSTRUCTEDPARTICLE);
   // create output collection and save every particle which contributes to a jet
-  IMPL::LCCollectionVec* lccParticlesOut_kh_soft_k(NULL);
+  IMPL::LCCollectionVec* lccParticlesOut_kh(NULL);
   if (_storeParticlesInJets){
-    lccParticlesOut_kh_soft_k= new IMPL::LCCollectionVec(LCIO::RECONSTRUCTEDPARTICLE);
-    lccParticlesOut_kh_soft_k->setSubset(true);
+    lccParticlesOut_kh= new IMPL::LCCollectionVec(LCIO::RECONSTRUCTEDPARTICLE);
+    lccParticlesOut_kh->setSubset(true);
   }
+
+ PseudoJetList::iterator it;
+
+  for (it=jetsk.begin(); it != jetsk.end(); it++) {
+    // create a reconstructed particle for this jet, and add all the containing particles to it
+    ReconstructedParticle* rec = _fju->convertFromPseudoJet( (*it), _fju->_cs->constituents(*it), particleIn);
+    lccJetsOut_kh->addElement( rec );
+
+    if (_storeParticlesInJets) {
+      for (unsigned int n = 0; n < _fju->_cs->constituents(*it).size(); ++n) {
+        ReconstructedParticle* p =
+          static_cast<ReconstructedParticle*>(particleIn->getElementAt((_fju->_cs->constituents(*it))[n].user_index()));
+        lccParticlesOut_kh->addElement( p );
+      }
+    }
+  }
+
+  evt->addCollection(lccJetsOut_kh, _lcJetOutName_kh);
+  if (_storeParticlesInJets) evt->addCollection(lccParticlesOut_kh, _lcParticleOutName_kh);
 
 
 }
 
 
 void khurshid_soft_killer::end()
-{ }
+{ streamlog_out(MESSAGE)
+    << "Found jets (after soft killer was applied): " << _statsFoundJets
+    << " (" << (double)_statsFoundJets/_statsNrEvents << " per event) "
+    << " - Skipped Empty events:" << _statsNrSkippedEmptyEvents
+    << " - Skipped Events after max nr of iterations reached: " << _statsNrSkippedMaxIterations
+    << " - Skipped Search for Fixed Nr Jets (due to insufficient nr of particles):" << _statsNrSkippedFixedNrJets
+    << std::endl;
+    
+    }
