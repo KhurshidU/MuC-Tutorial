@@ -25,6 +25,10 @@ FIND_PACKAGE( Marlin 1.0 REQUIRED ) # minimum required Marlin version
 FIND_PACKAGE( ROOT REQUIRED) ## COMPONENTS Hist)
 
 FIND_PACKAGE( RAIDA REQUIRED )
+FIND_PACKAGE(FastJet 3 REQUIRED COMPONENTS siscone siscone_spherical fastjetplugins fastjetcontribfragile fastjettools)
+INCLUDE_DIRECTORIES( SYSTEM ${FastJet_INCLUDE_DIRS} )
+LINK_LIBRARIES( ${FastJet_LIBRARIES} ${FastJet_COMPONENT_LIBRARIES} )
+
 
 ### DOCUMENTATION ###########################################################
 
@@ -40,7 +44,7 @@ ENDIF()
 
 	# Main library with Processors
 ADD_LIBRARY(TemplatePackage SHARED
-        /opt/ilcsoft/muonc/;/work/khurriccan/MuC-Tutorial/TemplatePackage/src/khurshid_works.cxx
+        /opt/ilcsoft/muonc/;/opt/ilcsoft/FastJet/3.2.1/FastJet/;/work/khurriccan/MuC-Tutorial/TemplatePackage/src/khurshid_works.cxx;/work/khurriccan/MuC-Tutorial/TemplatePackage/src/khurshid_soft_killer.cxx
   )
 TARGET_INCLUDE_DIRECTORIES(TemplatePackage
   PUBLIC
@@ -49,6 +53,7 @@ TARGET_INCLUDE_DIRECTORIES(TemplatePackage
   ${Marlin_INCLUDE_DIRS}
   ${RAIDA_INCLUDE_DIRS}
   ${ROOT_INCLUDE_DIRS})
+ 
 TARGET_LINK_LIBRARIES(TemplatePackage
   PRIVATE
   ${RAIDA_LIBRARIES}

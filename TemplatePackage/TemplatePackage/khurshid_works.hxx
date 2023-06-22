@@ -42,11 +42,12 @@ public:
   LCFlagImpl _flag{};
 private:
   //! Input Collection
-    std::vector<std::string> _inputEcalCollections{};
+  std::vector<std::string> _inputEcalCollections{};
+  std::vector<std::string> _inputHcalCollections{};
   //! Output Collection
  
   std::vector<std::string> _outputEcalCollections{};
-  
+  std::vector<std::string> _outputHcalCollections{}; 
   //! Minimum pT for particle filter
   float _minPt = 1;
 

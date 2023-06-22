@@ -62,7 +62,7 @@
     
     <!-- ========== Khurshid's Processors  ========== -->
     <processor name="khurshid_works"/>
-    
+    <processor name = "khurshid_soft_killer"/>
     <!-- ========== output  ========== -->
     <processor name="Output_DST"/>
     <processor name="Output_REC"/>
@@ -152,4 +152,8 @@
 
  <processor name="khurshid_works" type="khurshid_works">
  </processor>
+
+ <processor name="khurshid_soft_killer" type = "khurshid_soft_killer">
+ </processor>
+
 </marlin>
