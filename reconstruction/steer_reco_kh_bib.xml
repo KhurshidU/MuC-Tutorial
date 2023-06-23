@@ -72,7 +72,7 @@
   <global>
     <parameter name="LCIOInputFiles">/work/khurriccan/MuC-Tutorial/simulation/mumu_H_bb.slcio</parameter>
     <!-- Limit the number of processed records (run+evt): -->
-    <parameter name="MaxRecordNumber" value="-1" />
+    <parameter name="MaxRecordNumber" value="10" />
     <parameter name="SkipNEvents" value="0" />
     <parameter name="SupressCheck" value="false" />  
     <parameter name="Verbosity" options="DEBUG0-9,MESSAGE0-9,WARNING0-9,ERROR0-9,SILENT">MESSAGE </parameter>
@@ -109,7 +109,7 @@
     <!-- compression of output file 0: false >0: true (default) -->
     <parameter name="Compress" type="int" value="1"/>
     <!-- filename without extension-->
-    <parameter name="FileName" type="string" value="histograms_bib_kh"/>
+    <parameter name="FileName" type="string" value="histograms_bib_kh_10"/>
     <!-- type of output file xml (default) or root ( only OpenScientist)-->
     <parameter name="FileType" type="string" value="root "/>
   </processor>
@@ -121,7 +121,7 @@
 
   <processor name="Output_REC" type="LCIOOutputProcessor">
     <!--   standard output: keep all collections -->
-    <parameter name="LCIOOutputFile" type="string"> Output_REC_bib_kh.slcio </parameter>
+    <parameter name="LCIOOutputFile" type="string"> Output_REC_bib_kh_10.slcio </parameter>
     <parameter name="FullSubsetCollections" type="StringVec"> </parameter>
     <parameter name="LCIOWriteMode" type="string" value="None"/>
     <!-- <parameter name="SplitFileSizekB" type="int"> 996147 </parameter> --> 
@@ -133,7 +133,7 @@
 
   <processor name="Output_DST" type="LCIOOutputProcessor">
     <!--   dst output: keep only collections for analysis -->
-    <parameter name="LCIOOutputFile" type="string"> Output_DST_bib_kh.slcio </parameter>
+    <parameter name="LCIOOutputFile" type="string"> Output_DST_bib_kh_10.slcio </parameter>
     <parameter name="FullSubsetCollections" type="StringVec"> </parameter>
     <parameter name="DropCollectionTypes" type="StringVec">
       SimTrackerHit

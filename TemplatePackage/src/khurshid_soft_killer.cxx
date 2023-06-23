@@ -135,23 +135,24 @@ void khurshid_soft_killer::processEvent( LCEvent * evt ) {
 
 // softkiller will be here 
   //std::cout<<"Pseudo Jet list"<<pjList<<std::endl;
-  double grid_size = 0.4;
-  double rapmax = 1.0; //5 units of rapidity
+  double grid_size = 0.2;
+  double rapmax = 2.5; //5 units of rapidity
   fastjet::contrib::SoftKiller soft_killer(rapmax, grid_size);
 
   //contrib::SoftKiller soft_killer(-0.0, 4.0, 0.5, 0.3);
-   std::cout << "# of pfos in PseudoJet before soft killer  " << pjList.size()<<std::endl;
+   std::cout << "# of pfos in PseudoJet before soft killer   " << pjList.size()<<std::endl;
 for (unsigned int i=0; i<pjList.size(); i++){
     const fastjet::PseudoJet &jet = pjList[i];
     std::cout << "pt = " << jet.pt()
 	 << ", rap = " << jet.rap()
+   << ", phi = " <<jet.phi()
 	 << ", mass = " << jet.m() << std::endl;
   }
 
 
 
   
-  double pt_threshold = 20;
+  double pt_threshold;
   std::vector<fastjet::PseudoJet>  pjList_softly_killed;
   soft_killer.apply(pjList, pjList_softly_killed, pt_threshold);
 // alternative, more compact invocation
@@ -159,14 +160,18 @@ for (unsigned int i=0; i<pjList.size(); i++){
   std::cout << "# Ran the following soft killer: " << soft_killer.description() << std::endl;
 
   //std::cout << setprecision(4);
-  std::cout << "Soft Killer applied a pt threshold of " << pt_threshold << std::endl;
 
+  std::cout << std::setprecision(4);
+  std::cout << "Soft Killer applied a pt threshold of  " << pt_threshold << std::endl;
+
+  
 
 std::cout << "# of pfos in PseudoJet after soft killer  "<<pjList_softly_killed.size() << std::endl;
 for (unsigned int i=0; i<pjList_softly_killed.size(); i++){
     const fastjet::PseudoJet &jet = pjList_softly_killed[i];
     std::cout << "pt = " << jet.pt()
 	 << ", rap = " << jet.rap()
+   << ", phi = " <<jet.phi()
 	 << ", mass = " << jet.m() << std::endl;
   }
 
@@ -182,6 +187,8 @@ for (unsigned int i=0; i<pjList_softly_killed.size(); i++){
     _statsNrSkippedMaxIterations++;
   }
 
+
+  //std::vector<fastjet::PseudoJet> kill_jets = sel_jets(jetsk.inclusive_jets());
 // Sanity check -- I don't trust myself 
 
 /*std::cout << "# original full jets" << std::endl;
@@ -199,6 +206,7 @@ for (unsigned int i=0; i<pjList_softly_killed.size(); i++){
     const fastjet::PseudoJet &jet = jetsk[i];
     std::cout << "pt = " << jet.pt()
 	 << ", rap = " << jet.rap()
+   << ", phi = " <<jet.phi()
 	 << ", mass = " << jet.m() << std::endl;
   }
   std::cout << std::endl;

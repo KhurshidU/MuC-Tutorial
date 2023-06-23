@@ -154,7 +154,7 @@
  </processor>
 
  <processor name="khurshid_soft_killer" type = "khurshid_soft_killer">
-   <parameter name="algorithm" type="StringVec">kt_algorithm 0.7</parameter>
+   <parameter name="algorithm" type="StringVec">antikt_algorithm 0.7</parameter>
    <parameter name="clusteringMode" type="StringVec"> Inclusive 5</parameter>
    <parameter name="jetOut" type="string" lcioOutType="ReconstructedParticle">JetOut_kh </parameter>
    <parameter name="recParticleIn" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
