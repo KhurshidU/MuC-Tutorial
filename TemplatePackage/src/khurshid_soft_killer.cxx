@@ -136,18 +136,40 @@ void khurshid_soft_killer::processEvent( LCEvent * evt ) {
 // softkiller will be here 
   //std::cout<<"Pseudo Jet list"<<pjList<<std::endl;
   double grid_size = 0.4;
-  double rapmax = 5.0; //5 units of rapidity
+  double rapmax = 1.0; //5 units of rapidity
   fastjet::contrib::SoftKiller soft_killer(rapmax, grid_size);
 
   //contrib::SoftKiller soft_killer(-0.0, 4.0, 0.5, 0.3);
+   std::cout << "# of pfos in PseudoJet before soft killer  " << pjList.size()<<std::endl;
+for (unsigned int i=0; i<pjList.size(); i++){
+    const fastjet::PseudoJet &jet = pjList[i];
+    std::cout << "pt = " << jet.pt()
+	 << ", rap = " << jet.rap()
+	 << ", mass = " << jet.m() << std::endl;
+  }
+
+
+
   
-  double pt_threshold_1 = 0.1;
+  double pt_threshold = 20;
   std::vector<fastjet::PseudoJet>  pjList_softly_killed;
-  soft_killer.apply(pjList, pjList_softly_killed, pt_threshold_1);
+  soft_killer.apply(pjList, pjList_softly_killed, pt_threshold);
+// alternative, more compact invocation
+  //std::vector<fastjet::PseudoJet> pjList_softly_killed = soft_killer(pjList);
   std::cout << "# Ran the following soft killer: " << soft_killer.description() << std::endl;
 
   //std::cout << setprecision(4);
-  std::cout << "Soft Killer applied a pt threshold of " << pt_threshold_1 << std::endl;
+  std::cout << "Soft Killer applied a pt threshold of " << pt_threshold << std::endl;
+
+
+std::cout << "# of pfos in PseudoJet after soft killer  "<<pjList_softly_killed.size() << std::endl;
+for (unsigned int i=0; i<pjList_softly_killed.size(); i++){
+    const fastjet::PseudoJet &jet = pjList_softly_killed[i];
+    std::cout << "pt = " << jet.pt()
+	 << ", rap = " << jet.rap()
+	 << ", mass = " << jet.m() << std::endl;
+  }
+
 
 
   PseudoJetList jetsk;
@@ -171,7 +193,8 @@ void khurshid_soft_killer::processEvent( LCEvent * evt ) {
   }
  std::cout << std::endl;*/
   std::cout << "check point 1  " << std::endl;
-  std::cout << "# jets after applying the soft killer" << std::endl;
+  std::cout << "# jets after clustering " << std::endl;
+
   for (unsigned int i=0; i<jetsk.size(); i++){
     const fastjet::PseudoJet &jet = jetsk[i];
     std::cout << "pt = " << jet.pt()
@@ -212,6 +235,23 @@ void khurshid_soft_killer::processEvent( LCEvent * evt ) {
 
   evt->addCollection(lccJetsOut_kh, _lcJetOutName_kh);
   if (_storeParticlesInJets) evt->addCollection(lccParticlesOut_kh, _lcParticleOutName_kh);
+
+
+  // special case
+ // special case for the exclusive jet mode: we can save the transition y_cut value
+  if (_fju->_clusterMode == FJ_exclusive_nJets && jetsk.size() == _fju->_requestedNumberOfJets) {
+    // save the dcut value for this algorithm (although it might not be meaningful)
+    LCParametersImpl &lccJetParams((LCParametersImpl &)lccJetsOut_kh->parameters());
+
+    lccJetParams.setValue(std::string("d_{n-1,n}"), (float)_fju->_cs->exclusive_dmerge(nrJets-1));
+    lccJetParams.setValue(std::string("d_{n,n+1}"), (float)_fju->_cs->exclusive_dmerge(nrJets));
+    lccJetParams.setValue(std::string("y_{n-1,n}"), (float)_fju->_cs->exclusive_ymerge(nrJets-1));
+    lccJetParams.setValue(std::string("y_{n,n+1}"), (float)_fju->_cs->exclusive_ymerge(nrJets));
+  }
+
+
+
+
 
 
 }
