@@ -6,6 +6,7 @@ import subprocess
 for i in range(0,10):
 	runi_content = f"""
 		#!/bin/bash
+                 source /opt/ilcsoft/muonc/init_ilcsoft.sh
                  Marlin --global.LCIOInputFiles=/work/khurriccan/MuC-Tutorial/simulation/mumu_H_bb.slcio  --Output_REC.LCIOOutputFile=output_file_REC_{1}.slcio  --Output_DST.LCIOOutputFile=output_file_DST_{1}.slcio  --MyAIDAProcessor.FileName=histograms_{1}  --LCIOInputFiles.MaxRecordNumber=1  --LCIOInputFiles.SkipNEvents={i}  --Config.Overlay=Test steer_reco_kh_bib_sk_0.2g.xml > log_file_{i}.log 2>&1 
 	 """
 	# Write the shell script file
@@ -16,15 +17,15 @@ for i in range(0,10):
 	os.chmod(run_script_filename, 0o755)
 	# Make the shell script file executable
 	# Execute the shell script
-	os.system(f'./{run_script_filename}')
+	#os.system(f'./{run_script_filename}')
 
 for i in range(0,10):
         marlini_content = f"""
-              Universe = Vanilla
-	      Executable     = run{i}.sh
-              +SingularityImage = "docker://ubuntu"
+	      Universe = Vanilla
+              Executable     = run{i}.sh
+              +SingularityImage = "/cvmfs/unpacked.cern.ch/registry.hub.docker.com/infnpd/mucoll-ilc-framework:1.6-centos8"
               Requirements = HasSingularity              
-
+              transfer_input_files = "steer_reco_kh_bib_sk_0.2g.xml"
 	      Error   = output.err{i}.$(Cluster)-$(Process)
               Output  = output.out{i}.$(Cluster)-$(Process)
               Log     = output.log{i}.$(Cluster)
