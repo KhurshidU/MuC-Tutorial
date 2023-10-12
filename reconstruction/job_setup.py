@@ -4,19 +4,19 @@ import subprocess
 # Shell script content
 
 for i in range(0,10):
-	runi_content = f"""
-		#!/bin/bash
-                 source /opt/ilcsoft/muonc/init_ilcsoft.sh
-                 mkdir lib; mv *.so lib
-                 export MARLIN_DLL=${MARLIN_DLL}:$PWD/lib/libTemplatePackage.so 
-                 Marlin --global.LCIOInputFiles=/work/khurriccan/MuC-Tutorial/simulation/mumu_H_bb.slcio  --Output_REC.LCIOOutputFile=output_file_REC_{1}.slcio  --Output_DST.LCIOOutputFile=output_file_DST_{1}.slcio  --MyAIDAProcessor.FileName=histograms_{1}  --global.MaxRecordNumber=1  --global.SkipNEvents={i}  --Config.Overlay=Test steer_reco_kh_bib_sk_0.2g.xml > log_file_{i}.log 2>&1 
-	 """
+        marlin_string = "{MARLIN_DLL}"
+        runi_content = f"""
+        #!/bin/bash
+        source /opt/ilcsoft/muonc/init_ilcsoft.sh
+        mkdir lib; mv *.so lib
+        export MARLIN_DLL=${marlin_string}:$PWD/lib/libTemplatePackage.so 
+        Marlin --global.LCIOInputFiles=mumu_nunuH_1point5tev_hsbib_100events.slcio  --Output_REC.LCIOOutputFile=output_file_REC_{1}.slcio  --Output_DST.LCIOOutputFile=output_file_DST_{1}.slcio  --MyAIDAProcessor.FileName=histograms_{1}  --global.MaxRecordNumber=1  --global.SkipNEvents={i}  --Config.Overlay=Test steer_reco_bib_sk_batch.xml > log_file_{i}.log 2>&1
+        """
 	# Write the shell script file
-	run_script_filename = f'run{i}.sh'
-	with open(run_script_filename, 'w') as script_file:
-    		script_file.write(runi_content)
-
-	os.chmod(run_script_filename, 0o755)
+        run_script_filename = f'run{i}.sh'
+        with open(run_script_filename, 'w') as script_file:
+              script_file.write(runi_content)
+        os.chmod(run_script_filename, 0o755)
 	# Make the shell script file executable
 	# Execute the shell script
 	#os.system(f'./{run_script_filename}')
@@ -28,7 +28,7 @@ for i in range(0,10):
               
               Requirements = HAS_SINGULARITY == True
               +SingularityImage = "/cvmfs/unpacked.cern.ch/registry.hub.docker.com/infnpd/mucoll-ilc-framework:1.6-centos8"
-              transfer_input_files = steer_reco_kh_bib_sk_0.2g.xml, subconfigs, PandoraSettings, /work/khurriccan/MuC-Tutorial/TemplatePackage/src/, /work/khurriccan/MuC-Tutorial/TemplatePackage/TemplatePackage, /work/khurriccan/MuC-Tutorial/build/libTemplatePackage.so
+              transfer_input_files = steer_reco_bib_sk_batch.xml, subconfigs, PandoraSettings, /work/khurriccan/MuC-Tutorial/TemplatePackage/src, /work/khurriccan/MuC-Tutorial/TemplatePackage/TemplatePackage, /work/khurriccan/MuC-Tutorial/build/libTemplatePackage.so, /work/khurriccan/MuC-Tutorial/simulation/mumu_nunuH_1point5tev_hsbib_100events.slcio
 	      Error   = output.err{i}.$(Cluster)-$(Process)
               Output  = output.out{i}.$(Cluster)-$(Process)
               Log     = output.log{i}.$(Cluster)
