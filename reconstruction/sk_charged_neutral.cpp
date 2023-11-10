@@ -19,10 +19,10 @@
 #include <EVENT/ReconstructedParticle.h>
 #include <EVENT/MCParticle.h>
 
-khurshid_soft_killer akhurshid_soft_killer ;
+sk_charged_neutral ask_charged_neutral ;
 
-khurshid_soft_killer::khurshid_soft_killer():
-                                        Processor("khurshid_soft_killer"),
+khurshid_soft_killer::sk_charged_neutral():
+                                        Processor("sk_charged_neutral"),
                                        _lcParticleInName(""),
                                        _lcParticleOutName_kh(""),
                                        _lcJetOutName_kh(""),
@@ -57,7 +57,7 @@ std::cout << "crush point_2" << std::endl;
 
 }
 
-khurshid_soft_killer::khurshid_soft_killer(const khurshid_soft_killer& rhs):
+sk_charged_neutral::sk_charged_neutral(const sk_charged_neutral& rhs):
   Processor( rhs.name() ),
   _lcParticleInName(rhs._lcParticleInName),
   _lcParticleOutName_kh(rhs._lcParticleOutName_kh),
@@ -73,12 +73,12 @@ khurshid_soft_killer::khurshid_soft_killer(const khurshid_soft_killer& rhs):
 //      FastJetProcessor& operator=(const FastJetProcessor&) {}
 
 
-khurshid_soft_killer::~khurshid_soft_killer() {
+sk_charged_neutral::~sk_charged_neutral() {
   delete _fju;
 }
 
 
-void khurshid_soft_killer::init() {
+void sk_charged_neutral::init() {
   // Print the initial parameters
  // printParameters() ;
 
@@ -91,7 +91,7 @@ void khurshid_soft_killer::init() {
 }
 
 
-void khurshid_soft_killer::processEvent( LCEvent * evt ) {
+void sk_charged_neutral::processEvent( LCEvent * evt ) {
  
  /*  if( inputCol->getTypeName() != LCIO::CALORIMETERHIT ) {
     throw EVENT::Exception( "Invalid collection type: " + inputCol->getTypeName() ) ;
@@ -285,8 +285,8 @@ for (unsigned int i=0; i<pjList_neutral_softly_killed.size(); i++){
 
 }
 
-/// neww comment
-void khurshid_soft_killer::end()
+/// neww comment hhjggj
+void sk_charged_neutral::end()
 { streamlog_out(MESSAGE)
     << "Found jets (after soft killer was applied): " << _statsFoundJets
     << " (" << (double)_statsFoundJets/_statsNrEvents << " per event) "
