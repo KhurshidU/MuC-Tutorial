@@ -1,4 +1,4 @@
-#include "TemplatePackage/khurshid_soft_killer.hxx"
+#include "TemplatePackage/sk_charged_neutral.hxx"
 
 #include <EVENT/LCCollection.h>
 
@@ -21,7 +21,7 @@
 
 sk_charged_neutral ask_charged_neutral ;
 
-khurshid_soft_killer::sk_charged_neutral():
+sk_charged_neutral::sk_charged_neutral():
                                         Processor("sk_charged_neutral"),
                                        _lcParticleInName(""),
                                        _lcParticleOutName_kh(""),
@@ -130,33 +130,34 @@ void sk_charged_neutral::processEvent( LCEvent * evt ) {
   }
 
 // convert to pseudojet list
+/// split them pfos here  by charge
   PseudoJetList pjList = _fju->convertFromRecParticle(particleIn);
   std::vector<fastjet::PseudoJet>  pjList_charged;
   std::vector<fastjet::PseudoJet>  pjList_neutral;
   // Fill the vector with values using a loop
     for (int i = 0; i < pjList.size(); i++) {
         // You can add any values you want here
-        if (i->getCharge() == 1){
-          pjList_charged.push_back(i);
+        if (pjList[i]->GetCharge() == 1){   //  need to apply it one step earlier? 
+          pjList_charged.push_back(pjList[i]);
           }
         else {
-          pjList_neutral.push_back(i)
+          pjList_neutral.push_back(pjList[i]);
         }   
     }
      
     // Access and print the elements of the pseudo_charged and pseudo_neutral
     for (int i = 0; i < pjList_charged.size(); i++) {
-        &pfo = pjList_charged[i]
+        const fastjet::PseudoJet &pfo = pjList_charged[i];
         std::cout << "PFO Charged pt = "  << pfo.pt() << ", rap = " << pfo.rap()
         << ", phi = " <<pfo.phi()
-	      << ", mass = " << pfo.m() << std::endl; << std::endl;
+	      << ", mass = " << pfo.m() << std::endl;
     }
     
      for (int i = 0; i < pjList_neutral.size(); i++) {
-        &pfo = pjList_neutral[i]
+        const fastjet::PseudoJet &pfo = pjList_neutral[i];
         std::cout << "PFO Neutral pt  = " << pfo.pt() << ", rap = " << pfo.rap()
         << ", phi = " <<pfo.phi()
-	      << ", mass = " << pfo.m() << std::endl; << std::endl;
+	      << ", mass = " << pfo.m() << std::endl; 
     }
 
 
